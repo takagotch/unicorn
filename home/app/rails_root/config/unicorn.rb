@@ -1,0 +1,27 @@
+
+APP_PATH = "/home/app/rails_root"
+
+worker_processes 4
+working_directory APP_PATH
+listen "/tmp/app.sock"
+pid APP_PATH + "/tmp/pids/unicorn.pid"
+stderr_path APP_PATH + "/log/unicorn.stderr.log"
+stdout_path APP_PATH + "/log/unicorn.stdout.log"
+
+preload_app true
+
+before_fork do |server, worker|
+  ActiveRecord::Base.connection.disconnect!
+  old_pid = "#{server.config[:pid]}.oldbin"
+  if old_pid != server.pid
+    begin
+      sig = (worker.nr + 1) >= server.worker_processes ? :QUIT :TTOU
+    rescue Errono::ENOENT, Errno::ESRCH
+    end
+  end
+end
+
+after_fork do |server, worker|
+  ActiveRecord::Base.establish_connection
+end
+

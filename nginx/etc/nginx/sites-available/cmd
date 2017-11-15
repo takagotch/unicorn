@@ -1,0 +1,5 @@
+
+sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+sueo ln -s /etc/nginx/sites-available/app /etc/nginx/sies-enabled/
+sudo rm /etc/nginx/sites-enabled/app
+
